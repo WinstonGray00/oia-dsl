@@ -1,6 +1,6 @@
-package com.winston.prddsl.resource;
+package com.winston.oiadsl.resource;
 
-import com.winston.prddsl.entity.Greeting;
+import com.winston.oiadsl.entity.Greeting;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

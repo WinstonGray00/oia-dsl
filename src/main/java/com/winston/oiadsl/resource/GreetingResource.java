@@ -1,12 +1,10 @@
-package com.winston.prddsl.resource;
+package com.winston.oiadsl.resource;
 
 
-import com.winston.prddsl.entity.Greeting;
-import com.winston.prddsl.repository.GreetingRepository;
+import com.winston.oiadsl.entity.Greeting;
+import com.winston.oiadsl.repository.GreetingRepository;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
 
 @RestController
 public class GreetingResource {

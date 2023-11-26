@@ -1,10 +1,9 @@
-package com.winston.prddsl.entity;
+package com.winston.oiadsl.entity;
 
-import com.winston.prddsl.constant.MetaDataFormatEnum;
-import com.winston.prddsl.constant.MetaDataTypeEnum;
+import com.winston.oiadsl.constant.MetaDataFormatEnum;
+import com.winston.oiadsl.constant.MetaDataTypeEnum;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
 import lombok.Data;
 
 @Data
@@ -21,6 +20,4 @@ public class MetaInput {
     private String example;
     private MetaDataFormatEnum dataFormat;
 
-    @ManyToOne
-    private MetaActivity metaActivity;
 }

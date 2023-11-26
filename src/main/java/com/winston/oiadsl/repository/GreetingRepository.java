@@ -1,7 +1,6 @@
-package com.winston.prddsl.repository;
+package com.winston.oiadsl.repository;
 
-import com.winston.prddsl.entity.Greeting;
-import org.springframework.data.querydsl.QuerydslPredicateExecutor;
+import com.winston.oiadsl.entity.Greeting;
 import org.springframework.data.repository.Repository;
 
 import java.util.Optional;

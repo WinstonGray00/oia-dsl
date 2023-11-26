@@ -1,4 +1,4 @@
-package com.winston.prddsl.entity;
+package com.winston.oiadsl.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -15,9 +15,9 @@ public class MetaActivity {
     private String name;
     private String description;
 
-    @OneToMany(mappedBy = "metaActivity")
+    @ManyToMany
     private List<MetaInput> inputs;
-    @OneToMany(mappedBy = "metaActivity")
+    @ManyToMany
     private List<MetaOutput> outputs;
 
 }

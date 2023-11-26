@@ -1,4 +1,4 @@
-package com.winston.prddsl.entity;
+package com.winston.oiadsl.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -8,7 +8,6 @@ import java.util.List;
 @Data
 @Entity
 public class MetaEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

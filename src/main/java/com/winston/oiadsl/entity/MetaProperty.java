@@ -1,14 +1,13 @@
-package com.winston.prddsl.entity;
+package com.winston.oiadsl.entity;
 
-import com.winston.prddsl.constant.MetaDataFormatEnum;
-import com.winston.prddsl.constant.MetaDataTypeEnum;
+import com.winston.oiadsl.constant.MetaDataFormatEnum;
+import com.winston.oiadsl.constant.MetaDataTypeEnum;
 import jakarta.persistence.*;
 import lombok.Data;
 
 @Data
 @Entity
 public class MetaProperty {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -17,6 +16,7 @@ public class MetaProperty {
     private String description;
 
     private MetaDataTypeEnum dataType;
+    // TODO Not supported yet
     private MetaDataFormatEnum dataFormat;
 
     private Boolean required;

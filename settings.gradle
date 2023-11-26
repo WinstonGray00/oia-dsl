@@ -4,4 +4,4 @@ pluginManagement {
 		gradlePluginPortal()
 	}
 }
-rootProject.name = 'prddsl'
+rootProject.name = 'oiadsl'

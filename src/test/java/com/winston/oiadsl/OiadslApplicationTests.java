@@ -1,10 +1,10 @@
-package com.winston.prddsl;
+package com.winston.oiadsl;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class PrddslApplicationTests {
+class OiadslApplicationTests {
 
 	@Test
 	void contextLoads() {

@@ -1,4 +1,4 @@
-package com.winston.prddsl.entity;
+package com.winston.oiadsl.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
