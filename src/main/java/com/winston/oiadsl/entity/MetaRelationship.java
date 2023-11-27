@@ -1,9 +1,6 @@
 package com.winston.oiadsl.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Data
@@ -12,4 +9,12 @@ public class MetaRelationship {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    private String name;
+    private String description;
+    @ManyToOne
+    private MetaEntity from;
+    @ManyToOne
+    private MetaEntity to;
+
 }

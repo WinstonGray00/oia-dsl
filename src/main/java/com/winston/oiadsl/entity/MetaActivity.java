@@ -15,9 +15,12 @@ public class MetaActivity {
     private String name;
     private String description;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.PERSIST)
     private List<MetaInput> inputs;
-    @ManyToMany
-    private List<MetaOutput> outputs;
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    private List<MetaOutput> optionalOutputs;
+
+    @ManyToOne
+    private MetaEntity entity;
 
 }

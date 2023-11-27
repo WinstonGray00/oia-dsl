@@ -13,11 +13,18 @@ public class MetaEntity {
     private Long id;
 
     private String name;
-    @OneToMany(mappedBy = "metaEntity")
+    private String description;
+
+    @OneToMany(mappedBy = "entity", cascade = CascadeType.PERSIST)
     private List<MetaProperty> properties;
-    @OneToMany(mappedBy = "metaEntity")
+    @OneToMany(mappedBy = "entity", cascade = CascadeType.PERSIST)
     private List<MetaActivity> activities;
-    @OneToMany(mappedBy = "metaEntity")
-    private List<MetaRelationship> relationships;
+
+    /**
+     * seems no need to define relationships, because the relationship is defined in the meta property
+     * TODO remove this property
+     */
+//    @OneToMany(mappedBy = "metaEntity")
+//    private List<MetaRelationship> relationships;
 
 }

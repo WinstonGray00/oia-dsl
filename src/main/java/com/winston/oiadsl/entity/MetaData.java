@@ -7,10 +7,12 @@ import lombok.Data;
 
 @Data
 @Entity
-public class MetaProperty {
+public class MetaData {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    private Boolean isArray;
 
     private String name;
     private String description;
@@ -25,13 +27,17 @@ public class MetaProperty {
     private String defaultValue;
     private String example;
 
-    private String referencedEntity;
+    /**
+     * Recursive relationship.
+     */
+    @OneToOne
+    private MetaData parent;
 
-    @ManyToOne
-    private MetaEntity entity;
-
-//    @OneToOne(mappedBy = "referencedProperty")
-//    // TODO think about this if it is needed
-//    private MetaData data;
+    /**
+     * Some of the output data are properties of an entity.
+     * Establishing a reference relationship here is more in line with understanding habits.
+     */
+    @OneToOne
+    private MetaProperty referencedProperty;
 
 }
