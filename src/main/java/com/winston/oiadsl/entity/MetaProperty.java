@@ -25,7 +25,8 @@ public class MetaProperty {
     private String defaultValue;
     private String example;
 
-    private String referencedEntity;
+    @ManyToOne
+    private MetaEntity referencedEntity;
 
     @ManyToOne
     private MetaEntity entity;

@@ -5,6 +5,8 @@ import com.winston.oiadsl.constant.MetaDataTypeEnum;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @Entity
 public class MetaData {
@@ -39,5 +41,8 @@ public class MetaData {
      */
     @OneToOne
     private MetaProperty referencedProperty;
+
+    @Transient
+    private List<MetaData> children;
 
 }

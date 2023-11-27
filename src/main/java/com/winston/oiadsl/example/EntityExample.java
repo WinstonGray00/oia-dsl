@@ -8,31 +8,31 @@ import java.util.List;
 
 public class EntityExample {
 
-    public MetaEntity generateOrder() {
+    public MetaEntity generateOrder(List<MetaEntity> dependentEntities) {
         MetaEntity metaEntity = new MetaEntity();
         metaEntity.setName("Order");
         metaEntity.setDescription("Users need to place an order when purchasing products.");
-        metaEntity.setProperties(generateOrderProperties(metaEntity));
+        metaEntity.setProperties(generateOrderProperties(metaEntity, dependentEntities));
         return metaEntity;
     }
 
-    public MetaEntity generateOrderItem() {
+    public MetaEntity generateOrderItem(List<MetaEntity> dependentEntities) {
         MetaEntity metaEntity = new MetaEntity();
         metaEntity.setName("OrderItem");
         metaEntity.setDescription("An order can be composed of multiple order items, and each order item can contain multiple products.");
-        metaEntity.setProperties(generateOrderItemProperties(metaEntity));
+        metaEntity.setProperties(generateOrderItemProperties(metaEntity, dependentEntities));
         return metaEntity;
     }
 
-    public MetaEntity generateProduct() {
+    public MetaEntity generateProduct(List<MetaEntity> dependentEntities) {
         MetaEntity metaEntity = new MetaEntity();
         metaEntity.setName("Product");
         metaEntity.setDescription("A product can be purchased by users.");
-        metaEntity.setProperties(generateProductProperties(metaEntity));
+        metaEntity.setProperties(generateProductProperties(metaEntity, dependentEntities));
         return metaEntity;
     }
 
-    private List<MetaProperty> generateOrderProperties(MetaEntity metaEntity) {
+    private List<MetaProperty> generateOrderProperties(MetaEntity metaEntity, List<MetaEntity> dependentEntities) {
         // id
         MetaProperty propId = new MetaProperty();
         propId.setName("id");
@@ -76,7 +76,7 @@ public class EntityExample {
         orderItems.setIsRequired(true);
         orderItems.setIsUnique(false);
         orderItems.setEntity(metaEntity);
-        orderItems.setReferencedEntity("OrderItem");// TODO make it dynamic
+        orderItems.setReferencedEntity(getMatchedDependentEntity(dependentEntities, "OrderItem"));// TODO make it dynamic
 
         ArrayList<MetaProperty> metaProperties = new ArrayList<>();
         metaProperties.add(propId);
@@ -87,7 +87,11 @@ public class EntityExample {
         return metaProperties;
     }
 
-    private List<MetaProperty> generateOrderItemProperties(MetaEntity metaEntity) {
+    private static MetaEntity getMatchedDependentEntity(List<MetaEntity> dependentEntities, String entityName) {
+        return dependentEntities.stream().filter(e -> e.getName().equals(entityName)).findFirst().get();// TODO check if exists
+    }
+
+    private List<MetaProperty> generateOrderItemProperties(MetaEntity metaEntity, List<MetaEntity> dependentEntities) {
         // id
         MetaProperty propOrderItem = new MetaProperty();
         propOrderItem.setName("id");
@@ -131,7 +135,7 @@ public class EntityExample {
         products.setIsRequired(true);
         products.setIsUnique(false);
         products.setEntity(metaEntity);
-        products.setReferencedEntity("Product");
+        products.setReferencedEntity(getMatchedDependentEntity(dependentEntities, "Product"));
 
         ArrayList<MetaProperty> metaProperties = new ArrayList<>();
         metaProperties.add(propOrderItem);
@@ -142,7 +146,7 @@ public class EntityExample {
         return metaProperties;
     }
 
-    private List<MetaProperty> generateProductProperties(MetaEntity metaEntity) {
+    private List<MetaProperty> generateProductProperties(MetaEntity metaEntity, List<MetaEntity> dependentEntity) {
         // id
         MetaProperty propId = new MetaProperty();
         propId.setName("id");
@@ -205,16 +209,33 @@ public class EntityExample {
         actOrderProduct.setInputs(generateOrderProductInputs(metaEntity));
         actOrderProduct.setOptionalOutputs(generateOrderProductOptionalOutputs(metaEntity));
 
+        return null;
+    }
+
+    private List<MetaInput> generateOrderProductInputs(MetaEntity metaEntity) {
+        // ordering some products, meaning the products should be ordered, so here we need to pass an order and some products
+        MetaInput inputProduct = new MetaInput();
+        inputProduct.setName("products");
+        inputProduct.setDescription("The products to be ordered.");
+        inputProduct.setDataType(MetaDataTypeEnum.ARRAY);
+        inputProduct.setExample("");
+        inputProduct.setDefaultValue("");
+        inputProduct.setIsRequired(true);
+
 
         return null;
     }
 
     private List<MetaOutput> generateOrderProductOptionalOutputs(MetaEntity metaEntity) {
-        return null;
-    }
+        MetaData metaDataSuccess = MetaDataExample.orderProductSuccessful(metaEntity);
+        MetaData metaDataFailure = MetaDataExample.orderProductFailure(metaEntity);
+        MetaData metaDataUnExpectedException = MetaDataExample.orderProductUnexpectedException(metaEntity);
 
-    private List<MetaInput> generateOrderProductInputs(MetaEntity metaEntity) {
-        return null;
+        return new ArrayList<>() {{
+            add(new MetaOutput(null, "success", "order success", metaDataSuccess));
+            add(new MetaOutput(null, "failure", "order failure", metaDataFailure));
+            add(new MetaOutput(null, "exception", "order error", metaDataUnExpectedException));
+        }};
     }
 
     private List<MetaActivity> generateOrderItemActivities(MetaEntity metaEntity) {

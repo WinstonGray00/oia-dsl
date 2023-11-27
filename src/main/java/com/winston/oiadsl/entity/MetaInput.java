@@ -14,10 +14,11 @@ public class MetaInput {
 
     private String name;
     private MetaDataTypeEnum dataType;
-    private Boolean required;
+    private Boolean isRequired;
     private String defaultValue;
     private String description;
     private String example;
     private MetaDataFormatEnum dataFormat;
+
 
 }
