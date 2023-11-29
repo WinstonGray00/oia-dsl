@@ -1,7 +1,6 @@
 package com.winston.oiadsl.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.winston.oiadsl.constant.MetaDataFormatEnum;
 import com.winston.oiadsl.constant.MetaDataTypeEnum;
 import jakarta.persistence.*;

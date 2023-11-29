@@ -5,3 +5,4 @@ pluginManagement {
 	}
 }
 rootProject.name = 'oiadsl'
+include 'oiadsl-core'
