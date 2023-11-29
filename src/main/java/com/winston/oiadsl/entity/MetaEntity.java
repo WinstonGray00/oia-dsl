@@ -7,6 +7,9 @@ import java.util.List;
 
 @Data
 @Entity
+@Table(uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"name"})
+})
 public class MetaEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -15,9 +18,9 @@ public class MetaEntity {
     private String name;
     private String description;
 
-    @OneToMany(mappedBy = "entity", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "entity", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     private List<MetaProperty> properties;
-    @OneToMany(mappedBy = "entity", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "entity", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     private List<MetaActivity> activities;
 
     /**

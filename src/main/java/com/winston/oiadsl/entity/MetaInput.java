@@ -1,24 +1,22 @@
 package com.winston.oiadsl.entity;
 
-import com.winston.oiadsl.constant.MetaDataFormatEnum;
-import com.winston.oiadsl.constant.MetaDataTypeEnum;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Data
 @Entity
+@Table(uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"code", "data_id"})
+})
 public class MetaInput {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    private String code;
     private String name;
-    private MetaDataTypeEnum dataType;
-    private Boolean isRequired;
-    private String defaultValue;
-    private String description;
-    private String example;
-    private MetaDataFormatEnum dataFormat;
 
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    private MetaData data;
 
 }

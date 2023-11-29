@@ -2,17 +2,29 @@ package com.winston.oiadsl.example;
 
 import com.winston.oiadsl.constant.MetaDataTypeEnum;
 import com.winston.oiadsl.entity.*;
+import com.winston.oiadsl.repository.MetaEntityRepository;
+import com.winston.oiadsl.repository.MetaPropertyRepository;
+import jakarta.annotation.Resource;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class EntityExample {
+
+    @Resource
+    MetaEntityRepository metaEntityRepository;
+    @Resource
+    MetaPropertyRepository metaPropertyRepository;
+
 
     public MetaEntity generateOrder(List<MetaEntity> dependentEntities) {
         MetaEntity metaEntity = new MetaEntity();
         metaEntity.setName("Order");
         metaEntity.setDescription("Users need to place an order when purchasing products.");
         metaEntity.setProperties(generateOrderProperties(metaEntity, dependentEntities));
+        metaEntity.setActivities(generateOrderActivities(metaEntity));
         return metaEntity;
     }
 
@@ -159,14 +171,25 @@ public class EntityExample {
         propId.setEntity(metaEntity);
 
         // code
+        MetaProperty propCode = new MetaProperty();
+        propCode.setName("code");
+        propCode.setDescription("The code of the product.");
+        propCode.setDataType(MetaDataTypeEnum.STRING);
+        propCode.setExample("Product001");
+        propCode.setDefaultValue("");
+        propCode.setIsRequired(true);
+        propCode.setIsUnique(true);
+        propCode.setEntity(metaEntity);
+
+        // name
         MetaProperty propName = new MetaProperty();
-        propName.setName("code");
-        propName.setDescription("The code of the product.");
+        propName.setName("name");
+        propName.setDescription("The name of the product.");
         propName.setDataType(MetaDataTypeEnum.STRING);
-        propName.setExample("Product001");
+        propName.setExample("Product 001");
         propName.setDefaultValue("");
         propName.setIsRequired(true);
-        propName.setIsUnique(true);
+        propName.setIsUnique(false);
         propName.setEntity(metaEntity);
 
         // price
@@ -193,6 +216,7 @@ public class EntityExample {
 
         ArrayList<MetaProperty> metaProperties = new ArrayList<>();
         metaProperties.add(propId);
+        metaProperties.add(propCode);
         metaProperties.add(propName);
         metaProperties.add(propPrice);
         metaProperties.add(propStock);
@@ -206,44 +230,79 @@ public class EntityExample {
         actOrderProduct.setName("OrderProduct");
         actOrderProduct.setDescription("Order some products.");
         actOrderProduct.setEntity(metaEntity);
-        actOrderProduct.setInputs(generateOrderProductInputs(metaEntity));
+        actOrderProduct.setInput(generateOrderProductInput(metaEntity));
         actOrderProduct.setOptionalOutputs(generateOrderProductOptionalOutputs(metaEntity));
 
-        return null;
-    }
-
-    private List<MetaInput> generateOrderProductInputs(MetaEntity metaEntity) {
-        // ordering some products, meaning the products should be ordered, so here we need to pass an order and some products
-        MetaInput inputProduct = new MetaInput();
-        inputProduct.setName("products");
-        inputProduct.setDescription("The products to be ordered.");
-        inputProduct.setDataType(MetaDataTypeEnum.ARRAY);
-        inputProduct.setExample("");
-        inputProduct.setDefaultValue("");
-        inputProduct.setIsRequired(true);
-
-
-        return null;
-    }
-
-    private List<MetaOutput> generateOrderProductOptionalOutputs(MetaEntity metaEntity) {
-        MetaData metaDataSuccess = MetaDataExample.orderProductSuccessful(metaEntity);
-        MetaData metaDataFailure = MetaDataExample.orderProductFailure(metaEntity);
-        MetaData metaDataUnExpectedException = MetaDataExample.orderProductUnexpectedException(metaEntity);
+        // cancel order
+        MetaActivity actCancelOrder = new MetaActivity();
+        actCancelOrder.setName("CancelOrder");
+        actCancelOrder.setDescription("Cancel the order.");
+        actCancelOrder.setEntity(metaEntity);
+        actCancelOrder.setInput(generateCancelOrderInputs(metaEntity));
+        actCancelOrder.setOptionalOutputs(generateCancelOrderOptionalOutputs(metaEntity));
 
         return new ArrayList<>() {{
-            add(new MetaOutput(null, "success", "order success", metaDataSuccess));
-            add(new MetaOutput(null, "failure", "order failure", metaDataFailure));
-            add(new MetaOutput(null, "exception", "order error", metaDataUnExpectedException));
+            add(actOrderProduct);
+            add(actCancelOrder);
         }};
     }
 
-    private List<MetaActivity> generateOrderItemActivities(MetaEntity metaEntity) {
-        return null;
+    private List<MetaOutput> generateCancelOrderOptionalOutputs(MetaEntity metaEntity) {
+        MetaData metaDataSuccess = MetaDataExample.orderCancelOutputSuccessful(metaEntity);
+        MetaData metaDataFailure = MetaDataExample.orderCancelOutputFailure(metaEntity);
+
+        return new ArrayList<>() {{
+            add(new MetaOutput(null, "cancel order success", "cancel order  success", metaDataSuccess));
+            add(new MetaOutput(null, "cancel order failure", "cancel order  failure", metaDataFailure));
+        }};
     }
 
-    private List<MetaActivity> generateProductActivities(MetaEntity metaEntity) {
-        return null;
+    private MetaInput generateCancelOrderInputs(MetaEntity metaEntity) {
+        // need an order code
+        MetaEntity order = metaEntityRepository.findByName("Order");
+        MetaProperty code = metaPropertyRepository.findByNameAndEntity("code", order);
+
+        MetaData metaData = MetaDataExample.orderCancelInput(metaEntity, code);
+
+        MetaInput input = new MetaInput();
+        input.setCode("cancelOrder");
+        input.setName("Cancel the order");
+        input.setData(metaData);
+
+        return input;
+    }
+
+    private MetaInput generateOrderProductInput(MetaEntity metaEntity) {
+        // ordering some products, meaning the products should be ordered, so here we need to pass some products
+        MetaEntity product = metaEntityRepository.findByName("Product");
+        MetaProperty code = metaPropertyRepository.findByNameAndEntity("code", product);
+        MetaProperty price = metaPropertyRepository.findByNameAndEntity("price", product);
+        MetaProperty name = metaPropertyRepository.findByNameAndEntity("name", product);
+
+        MetaData metaData = MetaDataExample.orderProductInput(metaEntity, code, price, name);
+
+        MetaInput input = new MetaInput();
+        input.setCode("orderProduct");
+        input.setName("Order some products");
+        input.setData(metaData);
+
+        return input;
+    }
+
+    private List<MetaOutput> generateOrderProductOptionalOutputs(MetaEntity metaEntity) {
+        MetaData metaDataSuccess = MetaDataExample.orderProductOutputSuccessful(metaEntity);
+        MetaData metaDataFailure = MetaDataExample.orderProductOutputFailure(metaEntity);
+        MetaData metaDataUnExpectedException = MetaDataExample.orderProductOutputUnexpectedException(metaEntity);
+
+        return new ArrayList<>() {{
+            add(new MetaOutput(null, "order product success", "order product  success", metaDataSuccess));
+            add(new MetaOutput(null, "order product failure", "order product  failure", metaDataFailure));
+            add(new MetaOutput(null, "order product exception", "order product  error", metaDataUnExpectedException));
+        }};
+    }
+
+    private MetaProperty getPrimaryKey(MetaEntity metaEntity) {
+        return metaPropertyRepository.findByNameAndEntity("id", metaEntity);
     }
 
 }

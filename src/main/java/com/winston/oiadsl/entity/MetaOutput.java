@@ -9,6 +9,9 @@ import lombok.NoArgsConstructor;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"code", "data_id"})
+})
 public class MetaOutput {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -17,7 +20,7 @@ public class MetaOutput {
     private String code;
     private String name;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     private MetaData data;
 
 }

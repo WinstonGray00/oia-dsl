@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 @Data
-@Entity
+//@Entity
 public class MetaRelationship {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
