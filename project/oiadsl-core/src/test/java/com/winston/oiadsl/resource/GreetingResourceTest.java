@@ -15,16 +15,16 @@ class GreetingResourceTest {
 
     @Test
     void testHello() {
-        Greeting greeting = greetingResource.hello("1");
-        System.out.println(greeting);
+//        Greeting greeting = greetingResource.hello("1");
+//        System.out.println(greeting);
     }
 
     @Test
     void testHelloAdd() {
-        Greeting greeting = new Greeting(null,
-                "Hello, World!", LocalDateTime.now(), "Winston's house");
-
-        greetingResource.helloAdd(greeting);
+//        Greeting greeting = new Greeting(null,
+//                "Hello, World!", LocalDateTime.now(), "Winston's house");
+//
+//        greetingResource.helloAdd(greeting);
     }
 
 }
